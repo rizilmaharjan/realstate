@@ -17,7 +17,9 @@ export default function SignIn() {
   const onSubmit = async(data: Record<string,string>)=>{
     try {
       dispatch(signInStart())
-      const res = await Instance.post("/v1/auth/signin", data)
+      const res = await Instance.post("/v1/auth/signin", data,{
+        withCredentials: true
+      })
       reset()
       dispatch(signInSuccess(res.data.user))
       navigate("/")
