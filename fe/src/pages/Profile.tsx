@@ -8,13 +8,16 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+type TImageData = {
+  profilePicture?: string;
+};
 export default function Profile() {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
-  const [formData, setFormData] = useState({});
-  const {currentUser} = useAppSelector(state=>state.user)
+  const [formData, setFormData] = useState<TImageData>({});
+  const { currentUser } = useAppSelector((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -32,7 +35,7 @@ export default function Profile() {
       handleFileUpload(image);
     }
   }, [image]);
-  const handleFileUpload = async (image:File) => {
+  const handleFileUpload = async (image: File) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + image.name;
     const storageRef = ref(storage, fileName);
@@ -42,7 +45,7 @@ export default function Profile() {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(progress);
+        console.log(progress);
         setImagePercent(Math.round(progress));
       },
       (error) => {
@@ -63,7 +66,7 @@ export default function Profile() {
       <div className="p-3 max-w-lg mx-auto">
         <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
         <form className="flex flex-col gap-6">
-        <input
+          <input
             type="file"
             ref={fileRef}
             hidden
@@ -76,18 +79,22 @@ export default function Profile() {
       request.resource.size < 4 * 1024 * 1024 &&
       request.resource.contentType.matches('image/.*') */}
           <img
-            className="h-24 w-24 rounded-full self-center cursor-pointer"
-            src={currentUser?.profilePicture}
+            className="h-24 w-24 rounded-full object-cover object-center self-center cursor-pointer"
+            src={formData.profilePicture || currentUser?.profilePicture}
             alt="profile-picture"
             onClick={() => fileRef.current?.click()}
           />
-           <p className="text-sm self-center">
+          <p className="text-sm self-center">
             {imageError ? (
-              <span className="text-red-700">Error uploading image (file size must be less than 4MB) </span>
+              <span className="text-red-700">
+                Error uploading image (file size must be less than 4MB){" "}
+              </span>
             ) : imagePercent > 0 && imagePercent < 100 ? (
               <span className="text-slate-700">{`uploading: ${imagePercent} %`}</span>
             ) : imagePercent === 100 ? (
-              <span className="text-green-700">Image uploaded successfully</span>
+              <span className="text-green-700">
+                Image uploaded successfully
+              </span>
             ) : (
               ""
             )}
@@ -119,8 +126,12 @@ export default function Profile() {
           </button>
         </form>
         <div className="flex justify-between mt-5">
-          <span className="text-red-700 cursor-pointer font-semibold">Delete Account</span>
-          <span className="text-red-700 cursor-pointer font-semibold">Sign out</span>
+          <span className="text-red-700 cursor-pointer font-semibold">
+            Delete Account
+          </span>
+          <span className="text-red-700 cursor-pointer font-semibold">
+            Sign out
+          </span>
         </div>
       </div>
     </>
