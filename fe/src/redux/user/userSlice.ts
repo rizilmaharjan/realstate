@@ -1,7 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type TCurrentUser = {
+    username: string;
+    email: string;
+    password: string;
+    profilePicture: string;
+    createdAt: string;
+    updatedAt: string
+    _id: string
+}
 const initialState = {
-    currentUser: null,
+    currentUser: null as TCurrentUser | null,
     loading: false,
     error: false,
     errMsg: ""
