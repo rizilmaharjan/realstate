@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { updateUserFailure, updateUserStart, updateUserSuccess, deleteUserFailure, deleteUserSuccess, deleteUserStart } from "../redux/user/userSlice";
+import { updateUserFailure, updateUserStart, updateUserSuccess, deleteUserFailure, deleteUserSuccess, deleteUserStart, signOut } from "../redux/user/userSlice";
 import { useRef, useState, useEffect } from "react";
 import { Instance } from "../config/apiInstance";
 import { useNavigate } from "react-router-dom";
@@ -95,6 +95,19 @@ export default function Profile() {
       
     }
   }
+
+  const handleSignout = async()=>{
+    try {
+      const response = await Instance.get(`/v1/auth/signout`,{
+        withCredentials: true
+      })
+      dispatch(signOut())
+      navigate("/sign-in")
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -163,7 +176,7 @@ export default function Profile() {
           <span onClick={handleDelete} className="text-red-700 cursor-pointer font-semibold">
             Delete Account
           </span>
-          <span className="text-red-700 cursor-pointer font-semibold">
+          <span onClick={handleSignout} className="text-red-700 cursor-pointer font-semibold">
             Sign out
           </span>
         </div>
