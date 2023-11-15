@@ -16,8 +16,9 @@ export const signIn = async (req: Request, res: Response) => {
   try {
     const login = await signInUser(req.body);
     if (login) {
+        const expiryDate = new Date(Date.now() + 3600000)
       return res
-        .cookie("access_token", login.token, { httpOnly: true })
+        .cookie("access_token", login.token, { httpOnly: true, expires: expiryDate})
         .status(login.status)
         .json({ message: login.message, user: login.userData });
     }
