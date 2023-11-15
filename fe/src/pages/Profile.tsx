@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { updateUserFailure, updateUserStart, updateUserSuccess } from "../redux/user/userSlice";
 import { useRef, useState, useEffect } from "react";
+import { Instance } from "../config/apiInstance";
 import {
   getDownloadURL,
   getStorage,
@@ -12,6 +14,7 @@ type TImageData = {
   profilePicture?: string;
 };
 export default function Profile() {
+  const dispatch = useAppDispatch()
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imagePercent, setImagePercent] = useState(0);
@@ -61,11 +64,26 @@ export default function Profile() {
       }
     );
   };
+
+  const onSubmit = async(data: Record<string, any>)=>{
+    console.log(data);
+    const updatedData = {...data, profilePicture: formData.profilePicture};
+    try {
+      dispatch(updateUserStart())
+      const response = await Instance.put(`/v1/users/${currentUser?._id}`, updatedData,{
+        withCredentials: true
+      })
+      dispatch(updateUserSuccess(response.data.user))
+    } catch (error:any) {
+      dispatch(updateUserFailure(error.response.data.message))
+      
+    }
+  }
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
         <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-        <form className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <input
             type="file"
             ref={fileRef}

@@ -3,9 +3,12 @@ import express from "express"
 import cors from "cors"
 import bodyparser from "body-parser"
 import { connectDB } from '../config/dbConnect'
+import cookieParser from 'cookie-parser'
 
 
 import authRoutes from "./auth/index"
+import userRoutes from "./user/index"
+
 
 const PORT = process.env.PORT || 8000
 
@@ -16,7 +19,9 @@ app.use(cors({
     origin: "http://localhost:5173"
 }))
 app.use(bodyparser.json())
+app.use(cookieParser())
 app.use("/api", authRoutes())
+app.use("/api", userRoutes())
 
 
 
