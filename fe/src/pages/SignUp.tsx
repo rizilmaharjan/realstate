@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Instance } from "../config/apiInstance";
 export default function SignUp() {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const {
@@ -19,6 +20,7 @@ export default function SignUp() {
       reset();
       setLoading(false);
       setError(false);
+      navigate("/sign-in")
     } catch (error) {
       setLoading(false);
       setError(true);
