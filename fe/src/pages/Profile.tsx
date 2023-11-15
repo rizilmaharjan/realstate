@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { updateUserFailure, updateUserStart, updateUserSuccess } from "../redux/user/userSlice";
+import { updateUserFailure, updateUserStart, updateUserSuccess, deleteUserFailure, deleteUserSuccess, deleteUserStart } from "../redux/user/userSlice";
 import { useRef, useState, useEffect } from "react";
 import { Instance } from "../config/apiInstance";
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -14,6 +15,7 @@ type TImageData = {
   profilePicture?: string;
 };
 export default function Profile() {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
@@ -76,6 +78,20 @@ export default function Profile() {
       dispatch(updateUserSuccess(response.data.user))
     } catch (error:any) {
       dispatch(updateUserFailure(error.response.data.message))
+      
+    }
+  }
+
+  const handleDelete = async()=>{
+    try {
+      dispatch(deleteUserStart())
+      const response = await Instance.delete(`/users/${currentUser?._id}`,{
+        withCredentials: true
+      })
+      dispatch(deleteUserSuccess())
+      navigate("/sign-in")
+    } catch (error:any) {
+      dispatch(deleteUserFailure(error.response.data.message))
       
     }
   }
@@ -144,7 +160,7 @@ export default function Profile() {
           </button>
         </form>
         <div className="flex justify-between mt-5">
-          <span className="text-red-700 cursor-pointer font-semibold">
+          <span onClick={handleDelete} className="text-red-700 cursor-pointer font-semibold">
             Delete Account
           </span>
           <span className="text-red-700 cursor-pointer font-semibold">
