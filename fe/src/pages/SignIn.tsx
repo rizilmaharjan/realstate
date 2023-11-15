@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Instance } from "../config/apiInstance";
-import { useState } from "react";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 export default function SignIn() {
   const navigate = useNavigate()
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+  const {error, loading, errMsg} = useAppSelector(state=>state.user)
   const {
     register,
     handleSubmit,
@@ -15,16 +16,14 @@ export default function SignIn() {
   } = useForm();
   const onSubmit = async(data: Record<string,string>)=>{
     try {
-      setLoading(true)
+      dispatch(signInStart())
       const res = await Instance.post("/v1/auth/signin", data)
       reset()
-      setLoading(false)
-      setError(false)
+      dispatch(signInSuccess(res.data.user))
       navigate("/")
       
     } catch (error:any) {
-      setLoading(false)
-      setError(true)
+      dispatch(signInFailure(error.response.data.message))
       
     }
   }
@@ -59,7 +58,7 @@ export default function SignIn() {
             <span className="text-blue-500">Sign up</span>
           </NavLink>
         </div>
-        {error && <p className="text-red-600 font-semibold">Something went wrong</p>}
+        {error && <p className="text-red-600 font-semibold">{errMsg}</p>}
       </div>
     </>
   )}
