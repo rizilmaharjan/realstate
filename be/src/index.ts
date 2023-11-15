@@ -1,15 +1,19 @@
 import 'dotenv/config'
 import express from "express"
 import cors from "cors"
-import bodyParser from "body-parser"
+import bodyparser from "body-parser"
 import { connectDB } from '../config/dbConnect'
+
+
+import authRoutes from "./auth/index"
 
 const PORT = process.env.PORT || 8000
 
 connectDB()
 const app = express()
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyparser.json())
+app.use("/api", authRoutes())
 
 
 
