@@ -1,9 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { updateUserFailure, updateUserStart, updateUserSuccess, deleteUserFailure, deleteUserSuccess, deleteUserStart, signOut } from "../redux/user/userSlice";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+  deleteUserFailure,
+  deleteUserSuccess,
+  deleteUserStart,
+  signOut,
+} from "../redux/user/userSlice";
 import { useRef, useState, useEffect } from "react";
 import { Instance } from "../config/apiInstance";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -15,8 +23,8 @@ type TImageData = {
   profilePicture?: string;
 };
 export default function Profile() {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imagePercent, setImagePercent] = useState(0);
@@ -67,47 +75,48 @@ export default function Profile() {
     );
   };
 
-  const onSubmit = async(data: Record<string, any>)=>{
+  const onSubmit = async (data: Record<string, any>) => {
     console.log(data);
-    const updatedData = {...data, profilePicture: formData.profilePicture};
+    const updatedData = { ...data, profilePicture: formData.profilePicture };
     try {
-      dispatch(updateUserStart())
-      const response = await Instance.put(`/v1/users/${currentUser?._id}`, updatedData,{
-        withCredentials: true
-      })
-      dispatch(updateUserSuccess(response.data.user))
-    } catch (error:any) {
-      dispatch(updateUserFailure(error.response.data.message))
-      
+      dispatch(updateUserStart());
+      const response = await Instance.put(
+        `/v1/users/${currentUser?._id}`,
+        updatedData,
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(updateUserSuccess(response.data.user));
+    } catch (error: any) {
+      dispatch(updateUserFailure(error.response.data.message));
     }
-  }
+  };
 
-  const handleDelete = async()=>{
+  const handleDelete = async () => {
     try {
-      dispatch(deleteUserStart())
-      const response = await Instance.delete(`/users/${currentUser?._id}`,{
-        withCredentials: true
-      })
-      dispatch(deleteUserSuccess())
-      navigate("/sign-in")
-    } catch (error:any) {
-      dispatch(deleteUserFailure(error.response.data.message))
-      
+      dispatch(deleteUserStart());
+      const response = await Instance.delete(`/users/${currentUser?._id}`, {
+        withCredentials: true,
+      });
+      dispatch(deleteUserSuccess());
+      navigate("/sign-in");
+    } catch (error: any) {
+      dispatch(deleteUserFailure(error.response.data.message));
     }
-  }
+  };
 
-  const handleSignout = async()=>{
+  const handleSignout = async () => {
     try {
-      const response = await Instance.get(`/v1/auth/signout`,{
-        withCredentials: true
-      })
-      dispatch(signOut())
-      navigate("/sign-in")
+      const response = await Instance.get(`/v1/auth/signout`, {
+        withCredentials: true,
+      });
+      dispatch(signOut());
+      navigate("/sign-in");
     } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -171,12 +180,19 @@ export default function Profile() {
           >
             update
           </button>
+          <NavLink className={"bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"} to="/create-listing">Create Listing</NavLink>
         </form>
         <div className="flex justify-between mt-5">
-          <span onClick={handleDelete} className="text-red-700 cursor-pointer font-semibold">
+          <span
+            onClick={handleDelete}
+            className="text-red-700 cursor-pointer font-semibold"
+          >
             Delete Account
           </span>
-          <span onClick={handleSignout} className="text-red-700 cursor-pointer font-semibold">
+          <span
+            onClick={handleSignout}
+            className="text-red-700 cursor-pointer font-semibold"
+          >
             Sign out
           </span>
         </div>
