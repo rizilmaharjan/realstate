@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser'
 
 import authRoutes from "./auth/index"
 import userRoutes from "./user/index"
+import listingRoutes from "./listing/index"
 
 
 const PORT = process.env.PORT || 8000
@@ -22,6 +23,7 @@ app.use(bodyparser.json())
 app.use(cookieParser())
 app.use("/api", authRoutes())
 app.use("/api", userRoutes())
+app.use("/api", listingRoutes())
 
 
 
