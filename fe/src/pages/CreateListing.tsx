@@ -5,13 +5,17 @@ export default function CreateListing() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const onSubmit = (data:Record<string, any>)=>{
+    console.log(data);
+  }
   return (
     <>
       <main className="p-3 max-w-4xl mx-auto">
         <h1 className="text-3xl font-semibold text-center my-7">
           Create a Listing
         </h1>
-        <form className="flex flex-col sm:flex-row gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4">
           <div className="flex flex-col gap-4 flex-1">
             <input
               type="text"
@@ -21,7 +25,6 @@ export default function CreateListing() {
               })}
               className="rounded-lg border p-3"
               maxLength={62}
-              minLength={10}
             />
             {errors.name && <p>Name is required</p>}
             <textarea
@@ -143,12 +146,12 @@ export default function CreateListing() {
                 accept="image/*"
                 multiple
               />
-              <button className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80">
+              <button type="button" className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80">
                 Upload
               </button>
             </div>
 
-            <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+            <button type="submit" className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
               Create Listing
             </button>
           </div>
