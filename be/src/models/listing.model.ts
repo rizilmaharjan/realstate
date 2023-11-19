@@ -39,7 +39,7 @@ const listingSchema = new mongoose.Schema({
         required: [true, "parking is required"]
     },
     type:{
-        type: String,
+        type: [],
         required: [true, "type is required"]
     },
     offer:{
