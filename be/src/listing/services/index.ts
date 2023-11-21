@@ -1,4 +1,4 @@
-import { createListings, getListings } from "../Repository"
+import { createListings, deleteListing, getListings } from "../Repository"
 
 export const formulateListings = async(values:Record<string,any>)=>{
     try {
@@ -13,6 +13,16 @@ export const formulateListings = async(values:Record<string,any>)=>{
 export const fetchListings = async(id:string, decodedId:string)=>{
     try {
         const response = await getListings(id, decodedId)
+        return response
+        
+    } catch (error:any) {
+        return error
+        
+    }
+}
+export const removeListing = async(id:string, decodedId:string)=>{
+    try {
+        const response = await deleteListing(id, decodedId)
         return response
         
     } catch (error:any) {

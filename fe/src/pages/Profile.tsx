@@ -16,6 +16,7 @@ import {
   getDownloadURL,
   getStorage,
   ref,
+  updateMetadata,
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
@@ -146,6 +147,24 @@ export default function Profile() {
       setListingError(true);
     }
   };
+
+  const handleListingDelete = async (id: string) => {
+    try {
+      const response = await Instance.delete(`/v1/listing/${id}`, {
+        withCredentials: true,
+      });
+      if (response) {
+        const updatedListings = userListings?.filter((listing) => {
+          return listing._id !== id;
+        });
+        if (updatedListings) {
+          setUserListings(updatedListings);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -239,7 +258,9 @@ export default function Profile() {
           {listingError ? "Error showing listings" : ""}
         </p>
         <div className="flex flex-col gap-4">
-          <h1 className="text-center mb-8 text-2xl font-semibold">Your Listings</h1>
+          <h1 className="text-center mb-8 text-2xl font-semibold">
+            Your Listings
+          </h1>
           {userListings &&
             userListings.length > 0 &&
             userListings.map((listing) => (
@@ -261,7 +282,12 @@ export default function Profile() {
                   <p>{listing.name}</p>
                 </NavLink>
                 <div className="flex flex-col items-center">
-                  <button className="text-red-700 uppercase">Delete</button>
+                  <button
+                    onClick={() => handleListingDelete(listing._id)}
+                    className="text-red-700 uppercase"
+                  >
+                    Delete
+                  </button>
                   <button className="text-green-700 uppercase">Edit</button>
                 </div>
               </div>

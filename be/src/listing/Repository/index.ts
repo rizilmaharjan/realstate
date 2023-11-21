@@ -23,3 +23,21 @@ export const getListings = async(id:string, decodedId:string)=>{
         
     }
 }
+export const deleteListing = async(id:string, decodedId: string)=>{
+    try {
+        const listings = await Listing.findById(id)
+        console.log(listings);
+        if(listings?.userRef !== decodedId) return {status: 401, message: "You can only delete your own listing"}
+        
+        if(!listings) return {status: 404, message: "Listing does not exist"}
+
+        const deleteListing = await Listing.findByIdAndDelete(id)
+        return {status: 200, message:"Listing deleted successfully"}
+
+
+        
+    } catch (error:any) {
+        return error
+        
+    }
+}
