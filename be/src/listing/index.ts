@@ -5,7 +5,7 @@ const router = Router()
 
 const routes = ()=>{
     router.post("/v1/listing/create", verifyToken, createListings)
-    router.post("/v1/listing/:id", verifyToken, getListings)
+    router.get("/v1/listing/:id", verifyToken, getListings)
     return router
 }
 

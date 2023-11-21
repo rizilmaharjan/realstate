@@ -22,6 +22,21 @@ import { app } from "../firebase";
 type TImageData = {
   profilePicture?: string;
 };
+type TListings = {
+  name: string;
+  description: string;
+  address: string;
+  regularPrice: number;
+  discountPrice: number;
+  bathrooms: number;
+  bedrooms: number;
+  furnished: boolean;
+  parking: boolean;
+  type: string[];
+  offer: boolean;
+  imageUrls: string[];
+  _id: string;
+};
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -29,7 +44,9 @@ export default function Profile() {
   const [image, setImage] = useState<File | undefined>(undefined);
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
+  const [listingError, setListingError] = useState(false);
   const [formData, setFormData] = useState<TImageData>({});
+  const [userListings, setUserListings] = useState<TListings[] | null>(null);
   const { currentUser } = useAppSelector((state) => state.user);
   const {
     register,
@@ -117,6 +134,18 @@ export default function Profile() {
       console.log(error);
     }
   };
+
+  const handleShowListings = async () => {
+    try {
+      setListingError(false);
+      const response = await Instance.get(`/v1/listing/${currentUser?._id}`, {
+        withCredentials: true,
+      });
+      setUserListings(response.data.listingData);
+    } catch (error) {
+      setListingError(true);
+    }
+  };
   return (
     <>
       <div className="p-3 max-w-lg mx-auto">
@@ -180,7 +209,14 @@ export default function Profile() {
           >
             update
           </button>
-          <NavLink className={"bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"} to="/create-listing">Create Listing</NavLink>
+          <NavLink
+            className={
+              "bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+            }
+            to="/create-listing"
+          >
+            Create Listing
+          </NavLink>
         </form>
         <div className="flex justify-between mt-5">
           <span
@@ -195,6 +231,41 @@ export default function Profile() {
           >
             Sign out
           </span>
+        </div>
+        <button className="text-green-700 w-full" onClick={handleShowListings}>
+          Show Listings
+        </button>
+        <p className="text-red-500 text-sm font-semibold">
+          {listingError ? "Error showing listings" : ""}
+        </p>
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mb-8 text-2xl font-semibold">Your Listings</h1>
+          {userListings &&
+            userListings.length > 0 &&
+            userListings.map((listing) => (
+              <div
+                key={listing._id}
+                className="border rounded-lg p-3 flex items-center justify-between gap-4"
+              >
+                <NavLink to={`/listing/${listing._id}`}>
+                  <img
+                    className="h-16 w-16 object-contain"
+                    src={listing.imageUrls[0]}
+                    alt={listing.name}
+                  />
+                </NavLink>
+                <NavLink
+                  className="text-slate-700 font-semibold flex-1 hover:underline truncate"
+                  to={`/listing/${listing._id}`}
+                >
+                  <p>{listing.name}</p>
+                </NavLink>
+                <div className="flex flex-col items-center">
+                  <button className="text-red-700 uppercase">Delete</button>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </>
