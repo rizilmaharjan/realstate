@@ -5,6 +5,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
+import { IoLocationSharp } from "react-icons/io5";
+import { FaBed, FaBath, FaParking,FaChair } from "react-icons/fa";
+// {
+//
+//
+// }
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -43,14 +49,85 @@ export default function Listing() {
             <Swiper navigation>
               {listing.imageUrls.map((url: string) => (
                 <SwiperSlide key={url}>
-                  <div
-                    className="h-[500px] bg-red-700 flex justify-center"
-                  >
-                    <img className="object-cover object-center w-full" src={url} alt="houses" />
+                  <div className="h-[500px] flex justify-center">
+                    <img
+                      className="object-cover object-center w-full"
+                      src={url}
+                      alt="houses"
+                    />
                   </div>
                 </SwiperSlide>
               ))}
             </Swiper>
+
+            {/* descriptions */}
+            <div className="p-4 max-w-screen-xl mx-auto">
+              <h1 className="capitalize font-semibold text-2xl">
+                {listing.name}{" "}
+                <span className="lowercase">
+                  {listing.type[0] === "rent"
+                    ? `$ ${listing.regularPrice} / month`
+                    : ""}
+                </span>
+              </h1>
+              {/* location */}
+              <p className="flex items-center gap-1 text-gray-600 font-semibold mt-2">
+                <IoLocationSharp className="text-gray-600" /> {listing.address}
+              </p>
+
+              {/* interactions */}
+              <div className="w-fit mt-2">
+                {listing.type[0] === "rent" ? (
+                  <button className="bg-red-900 w-28 py-1 rounded-lg text-white font-semibold">
+                    For Rent
+                  </button>
+                ) : (
+                  <button className="bg-red-900 w-28 py-1 rounded-lg text-white font-semibold">
+                    For Sale
+                  </button>
+                )}
+
+                {listing.discountPrice > 0 && (
+                  <button className="bg-green-800 w-28 py-1 rounded-lg text-white font-semibold">
+                    ${listing.discountPrice}
+                  </button>
+                )}
+              </div>
+
+              {/*property description */}
+              <p className=" text-slate-800 mt-2">
+                <span className="font-semibold  text-black"> Description-</span>
+                {listing.description}
+              </p>
+
+              {/* essences */}
+              <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 mt-2 sm:gap-6">
+                <li className="flex items-center gap-1 whitespace-nowrap">
+                  <FaBed className="text-lg" />
+                  {listing.bedrooms > 1
+                    ? `${listing.bedrooms} bedrooms`
+                    : `${listing.bedrooms} bedroom`}
+                </li>
+                <li className="flex items-center gap-1 whitespace-nowrap">
+                  <FaBath className="text-lg" />
+                  {listing.bathrooms > 1
+                    ? `${listing.bathrooms} bathrooms`
+                    : `${listing.bathrooms} bathroom`}
+                </li>
+                <li className="flex items-center gap-1 whitespace-nowrap">
+                  <FaParking />
+                  {listing.parking
+                    ? "Parking spot"
+                    : "No parking"}
+                </li>
+                <li className="flex items-center gap-1 whitespace-nowrap">
+                <FaChair />
+                  {listing.parking
+                    ? "Furnished"
+                    : "Unfurnished"}
+                </li>
+              </ul>
+            </div>
           </>
         )}
       </div>
