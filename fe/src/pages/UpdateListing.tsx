@@ -59,7 +59,7 @@ export default function UpdateListing() {
     try {
       setLoading(true);
       setError(false);
-      const res = await Instance.post("/v1/listing/create", postData, {
+      const res = await Instance.post(`/v1/listing/${listId}`, postData, {
         withCredentials: true,
       });
       reset();
@@ -376,12 +376,7 @@ export default function UpdateListing() {
                       : ""
                   } `}
                   type="file"
-                  {...register("imageUrls", {
-                    required: {
-                      value: true,
-                      message: "Images are required",
-                    },
-                  })}
+                  {...register("imageUrls")}
                   accept="image/*"
                   multiple
                 />
@@ -421,8 +416,12 @@ export default function UpdateListing() {
                   </div>
                 ))}
 
+                {
+                  formData.imageUrls.length === 0 && <p className="font-semibold text-red-500">Please choose an image</p>
+                }
+
               <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-                {loading ? "Creating..." : "Update listing"}
+                {loading ? "Updating..." : "Update listing"}
               </button>
               {error && (
                 <p className="text-red-500 text-sm font-semibold">
