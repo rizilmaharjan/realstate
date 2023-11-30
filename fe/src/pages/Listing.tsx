@@ -6,11 +6,9 @@ import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { IoLocationSharp } from "react-icons/io5";
-import { FaBed, FaBath, FaParking,FaChair } from "react-icons/fa";
-// {
-//
-//
-// }
+import { FaBed, FaBath, FaParking, FaChair } from "react-icons/fa";
+import { useAppSelector } from "../redux/hooks";
+import Contact from "../components/Contact";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -18,6 +16,10 @@ export default function Listing() {
   const [listing, setListing] = useState<Record<string, any> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [contact, setContact] = useState(false);
+
+  const { currentUser } = useAppSelector((state) => state.user);
+
   useEffect(() => {
     const fetchListing = async () => {
       setIsLoading(true);
@@ -116,17 +118,24 @@ export default function Listing() {
                 </li>
                 <li className="flex items-center gap-1 whitespace-nowrap">
                   <FaParking />
-                  {listing.parking
-                    ? "Parking spot"
-                    : "No parking"}
+                  {listing.parking ? "Parking spot" : "No parking"}
                 </li>
                 <li className="flex items-center gap-1 whitespace-nowrap">
-                <FaChair />
-                  {listing.parking
-                    ? "Furnished"
-                    : "Unfurnished"}
+                  <FaChair />
+                  {listing.parking ? "Furnished" : "Unfurnished"}
                 </li>
               </ul>
+              {currentUser &&
+                currentUser._id !== listing.userRef &&
+                !contact && (
+                  <button
+                    onClick={() => setContact(true)}
+                    className="bg-slate-700 text-white rounded-lg mt-6 w-full uppercase hover:opacity-95 p-3"
+                  >
+                    Contact landlord
+                  </button>
+                )}
+              {contact && <Contact listing={listing} />}
             </div>
           </>
         )}

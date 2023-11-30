@@ -48,3 +48,12 @@ export const deleteUser = async (id: string, decodedId: string) => {
     return error;
   }
 };
+export const getUser = async (id: string) => {
+  try {
+    const user = await User.findById(id);
+    if(!user) return {status: 404, message:"User not found"}
+    return {status:200, message: "User fetched successfully", userData:user}
+  } catch (error) {
+    return error;
+  }
+};

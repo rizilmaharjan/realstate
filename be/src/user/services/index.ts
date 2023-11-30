@@ -1,4 +1,4 @@
-import { deleteUser, updateUser } from "../Repository"
+import { deleteUser, getUser, updateUser } from "../Repository"
 export const updateIndividualUser = async(id:string, decodedId: string, values: Record<string, any> )=>{
     try {
         const response = await updateUser(id, decodedId, values)
@@ -13,6 +13,16 @@ export const updateIndividualUser = async(id:string, decodedId: string, values: 
 export const deleteIndividualUser = async(id:string, decodedId: string)=>{
     try {
         const response = await deleteUser(id, decodedId)
+        return response
+        
+    } catch (error:any) {
+        return error
+        
+    }
+}
+export const fetchUser = async(id:string)=>{
+    try {
+        const response = await getUser(id)
         return response
         
     } catch (error:any) {
