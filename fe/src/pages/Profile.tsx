@@ -16,7 +16,7 @@ import {
   getDownloadURL,
   getStorage,
   ref,
-  updateMetadata,
+  
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
@@ -139,7 +139,7 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setListingError(false);
-      const response = await Instance.get(`/v1/listing/${currentUser?._id}`, {
+      const response = await Instance.get("/v1/listing/all", {
         withCredentials: true,
       });
       setUserListings(response.data.listingData);
@@ -288,7 +288,10 @@ export default function Profile() {
                   >
                     Delete
                   </button>
+                  <NavLink to={`/update-listing/${listing._id}`}>
+
                   <button className="text-green-700 uppercase">Edit</button>
+                  </NavLink>
                 </div>
               </div>
             ))}

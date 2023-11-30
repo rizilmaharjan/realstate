@@ -1,4 +1,4 @@
-import { createListings, deleteListing, getListings, updateListing } from "../Repository"
+import { createListings, deleteListing, getIndividualListing, getListings, updateListing } from "../Repository"
 
 export const formulateListings = async(values:Record<string,any>)=>{
     try {
@@ -10,9 +10,9 @@ export const formulateListings = async(values:Record<string,any>)=>{
         
     }
 }
-export const fetchListings = async(id:string, decodedId:string)=>{
+export const fetchListings = async(id:string)=>{
     try {
-        const response = await getListings(id, decodedId)
+        const response = await getListings(id)
         return response
         
     } catch (error:any) {
@@ -33,6 +33,16 @@ export const removeListing = async(id:string, decodedId:string)=>{
 export const updateIndividualListing = async(id:string, decodedId:string, values:Record<string,any>)=>{
     try {
         const response = await updateListing(id, decodedId, values)
+        return response
+        
+    } catch (error:any) {
+        return error
+        
+    }
+}
+export const getSpecificListing = async(id:string)=>{
+    try {
+        const response = await getIndividualListing(id)
         return response
         
     } catch (error:any) {

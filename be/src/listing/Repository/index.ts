@@ -12,11 +12,9 @@ export const createListings = async (values: Record<string, any>) => {
     return error;
   }
 };
-export const getListings = async (id: string, decodedId: string) => {
-  if (id !== decodedId)
-    return { status: 401, message: "You can only view your own listings" };
+export const getListings = async (id: string) => {
   try {
-    const listings = await Listing.find({ userRef: id });
+    const listings = await Listing.find({userRef: id});
     return {
       status: 200,
       message: "Listings fetched successfully",
@@ -48,6 +46,17 @@ export const updateListing = async (id: string, decodedId: string, values:Record
 
     const updateListing = await Listing.findByIdAndUpdate(id, values, {new:true});
     return { status: 200, message: "Listing updated successfully", listingData:updateListing };
+  } catch (error: any) {
+    return error;
+  }
+};
+export const getIndividualListing = async (id: string) => {
+  try {
+    const listing = await Listing.findById(id);
+    if (!listing) return { status: 404, message: "Listing does not exist" };
+
+    const fetchSpecificListing = await Listing.findById(id);
+    return { status: 200, message: "Listing updated successfully", listingData:fetchSpecificListing };
   } catch (error: any) {
     return error;
   }
