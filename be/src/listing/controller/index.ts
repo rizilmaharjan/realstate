@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { fetchListings, formulateListings, getSpecificListing, removeListing, updateIndividualListing } from "../services"
+import { fetchAllListings, fetchListings, formulateListings, getSpecificListing, removeListing, updateIndividualListing } from "../services"
 export const createListings = async(req:Request, res:Response)=>{
     try {
         const response = await formulateListings(req.body)
@@ -58,7 +58,23 @@ export const updateListing = async(req:Request, res:Response)=>{
 export const getIndividualListing = async(req:Request, res:Response)=>{
     const {id} = req.params;
     try {
+        
         const response = await getSpecificListing(id)
+        if(response){
+            return res.status(response.status).json({message: response.message, listingData: response.listingData})
+        }
+        
+    } catch (error:any) {
+        return error
+        
+    }
+}
+export const getAllistings = async(req:Request, res:Response)=>{
+    console.log("query", req.query)
+    console.log("inside the controller")
+    try {
+        const response = await fetchAllListings(req.query)
+        console.log("response", response)
         if(response){
             return res.status(response.status).json({message: response.message, listingData: response.listingData})
         }
