@@ -70,7 +70,6 @@ export const getIndividualListing = async(req:Request, res:Response)=>{
     }
 }
 export const getAllistings = async(req:Request, res:Response)=>{
-    console.log("query", req.query)
     console.log("inside the controller")
     try {
         const response = await fetchAllListings(req.query)

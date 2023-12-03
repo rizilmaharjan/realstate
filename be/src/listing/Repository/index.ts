@@ -90,7 +90,7 @@ export const getAllListings = async (limit:number, startIndex:number, offer:bool
 
     return {
       status: 200,
-      message: "Listing updated successfully",
+      message: "Listings fetched successfully",
       listingData: listing,
     };
   } catch (error: any) {
