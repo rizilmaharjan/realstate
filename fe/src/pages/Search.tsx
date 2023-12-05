@@ -2,11 +2,28 @@ import { useForm } from "react-hook-form";
 import { Instance } from "../config/apiInstance";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ListingItem from "../components/ListingItem";
+
+type TResponse = {
+  name: string;
+  description: string;
+  address: string;
+  regularPrice: number;
+  discountPrice: number;
+  bathrooms: number;
+  bedrooms: number;
+  furnished: boolean;
+  parking: boolean;
+  type: string;
+  offer: boolean;
+  imageUrls: string[];
+  _id:string
+};
 
 export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [listing, setListing] = useState([]);
+  const [listing, setListing] = useState<TResponse[] | null>(null);
 
   const urlParmas = new URLSearchParams(location.search);
 
@@ -170,10 +187,29 @@ export default function Search() {
         </div>
 
         {/* listings */}
-        <div className="">
+        <div className="w-full">
           <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
             Listing results:
           </h1>
+          <div className="flex flex-col gap-4 sm:flex-row flex-wrap">
+            {
+              !loading && listing?.length === 0 && (
+                <p className="text-lg font-semibold text-center text-slate-700 p-7">No Listing Found!</p>
+              )
+            }
+
+            {
+              loading && (
+                <p className="text-center">Loading...</p>
+              )
+            }
+
+            {
+              !loading && listing && listing.map((item)=>(
+                <ListingItem key={item._id} listing={item} />
+              ))
+            }
+          </div>
         </div>
       </div>
     </>
