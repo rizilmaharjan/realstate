@@ -17,13 +17,14 @@ type TResponse = {
   type: string;
   offer: boolean;
   imageUrls: string[];
-  _id:string
+  _id: string;
 };
 
 export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState<TResponse[] | null>(null);
+  const [showMore, setShowMore] = useState(false);
 
   const urlParmas = new URLSearchParams(location.search);
 
@@ -75,10 +76,16 @@ export default function Search() {
     const fetchListings = async () => {
       try {
         setLoading(true);
+        setShowMore(false)
         const searchQuery = urlParmas.toString();
         const res = await Instance.get(`/v1/listing/?${searchQuery}`, {
           withCredentials: true,
         });
+        if (res.data.listingData.length > 8) {
+          setShowMore(true);
+        }else{
+          setShowMore(false)
+        }
         setListing(res.data.listingData);
         setLoading(false);
       } catch (error) {
@@ -89,7 +96,25 @@ export default function Search() {
     fetchListings();
   }, [location.search]);
 
-  console.log("inside listing state", listing)
+  console.log("inside listing state", listing);
+
+  const onShowMoreClick = async () => {
+    const numberOfListings = listing?.length;
+    const startIndex = numberOfListings ?? 0;
+
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await Instance.get(`/v1/listing/?${searchQuery}`, {
+      withCredentials: true,
+    });
+    if (res.data.listingData.length < 9) {
+      setShowMore(false);
+    }
+    if (listing != null) {
+      setListing([...listing, ...res.data.listingData]);
+    }
+  };
 
   return (
     <>
@@ -192,23 +217,27 @@ export default function Search() {
             Listing results:
           </h1>
           <div className="flex flex-col gap-4 sm:flex-row flex-wrap">
-            {
-              !loading && listing?.length === 0 && (
-                <p className="text-lg font-semibold text-center text-slate-700 p-7">No Listing Found!</p>
-              )
-            }
+            {!loading && listing?.length === 0 && (
+              <p className="text-lg font-semibold text-center text-slate-700 p-7">
+                No Listing Found!
+              </p>
+            )}
 
-            {
-              loading && (
-                <p className="text-center">Loading...</p>
-              )
-            }
+            {loading && <p className="text-center">Loading...</p>}
 
-            {
-              !loading && listing && listing.map((item)=>(
+            {!loading &&
+              listing &&
+              listing.map((item) => (
                 <ListingItem key={item._id} listing={item} />
-              ))
-            }
+              ))}
+            {showMore && (
+              <button
+                className="text-green-700 hover:underline p-7 text-center w-full"
+                onClick={onShowMoreClick}
+              >
+                Show more
+              </button>
+            )}
           </div>
         </div>
       </div>
