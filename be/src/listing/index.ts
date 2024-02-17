@@ -9,7 +9,7 @@ const routes = ()=>{
     router.get("/v1/listing/all", verifyToken, getAllListings)
     router.delete("/v1/listing/:id", verifyToken, deleteListing)
     router.post("/v1/listing/:id", verifyToken, updateListing)
-    router.get("/v1/listing/:id", verifyToken, getIndividualListing)
+    router.get("/v1/listing/:id", getIndividualListing)
     // get all available listings
     router.get("/v1/listing", getAllistings)
     return router
