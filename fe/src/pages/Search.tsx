@@ -212,7 +212,7 @@ export default function Search() {
         </div>
 
         {/* listings */}
-        <div className="w-full">
+        <div className="w-full p-3">
           <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
             Listing results:
           </h1>
