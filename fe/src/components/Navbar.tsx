@@ -2,28 +2,33 @@ import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../redux/hooks";
+import ProfilePicture from "./ProfilePicture";
 export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+
+  const { currentUser } = useAppSelector((state) => state.user);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("searchTerm", searchTerm);
     const searchQuery = urlParams.toString();
-    console.log("searchQuery", searchQuery)
+    console.log("searchQuery", searchQuery);
     navigate(`/search?${searchQuery}`);
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search)
-    const searchTermFromUrl = urlParams.get("searchTerm")
-    if(searchTermFromUrl){
-      setSearchTerm(searchTermFromUrl)
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
     }
-   
-  }, [location.search])
+  }, [location.search]);
+
   
+
   return (
     <>
       <nav className="bg-slate-200 shadow-md">
@@ -50,7 +55,7 @@ export default function Navbar() {
               <FaSearch className="text-slate-600" />
             </button>
           </form>
-          <ul className="flex gap-4">
+          <ul className="flex items-center gap-4">
             <NavLink to="/">
               {" "}
               <li className="hidden sm:inline text-slate-700 hover:underline cursor-pointer">
@@ -63,12 +68,15 @@ export default function Navbar() {
                 About
               </li>
             </NavLink>
-            <NavLink to="/sign-in">
-              {" "}
-              <li className="sm:inline text-slate-700 hover:underline cursor-pointer">
-                Sign in
-              </li>
-            </NavLink>
+            {currentUser ? (
+              <ProfilePicture />
+            ) : (
+              <NavLink to="/sign-in">
+                <li className="sm:inline text-slate-700 hover:underline cursor-pointer">
+                  Sign In
+                </li>
+              </NavLink>
+            )}
           </ul>
         </div>
       </nav>
