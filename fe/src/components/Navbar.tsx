@@ -35,8 +35,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
           <NavLink to="/">
             <h1 className="text-sm font-bold sm:text-xl flex flex-wrap items-center">
-              <span className="text-slate-500">Sahand</span>
-              <span className="text-slate-700">Estate</span>
+              <span className="text-slate-500">Estate</span>
+              <span className="text-slate-700">Ease</span>
             </h1>
           </NavLink>
 
