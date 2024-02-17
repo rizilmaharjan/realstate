@@ -90,8 +90,8 @@ export default function Listing() {
                 )}
 
                 {listing.discountPrice > 0 && (
-                  <button className="bg-green-800 w-28 py-1 rounded-lg text-white font-semibold">
-                    ${listing.discountPrice} off
+                  <button className="bg-green-800 px-2 py-1 rounded-lg text-white font-semibold">
+                    Rs {listing.discountPrice.toLocaleString("en-IN")} off
                   </button>
                 )}
               </div>

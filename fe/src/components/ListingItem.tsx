@@ -18,9 +18,9 @@ export default function ListingItem({listing}:any) {
                 <p className="text-justify line-clamp-3 text-sm text-gray-600">{listing.description}</p>
                 <p className="text-slate-500 mt-2 font-semibold">
 
-                $
-                {
-                  listing.offer ? listing.discountPrice.toLocaleString("en-US") : listing.regularPrice.toLocaleString("en-us")
+               
+                Rs {
+                  listing.offer ? listing.discountPrice.toLocaleString("en-IN") : listing.regularPrice.toLocaleString("en-IN")
                 }
                 {
                   listing.type[0] === "rent" && " / month"
