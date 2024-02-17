@@ -78,7 +78,7 @@ export default function Listing() {
               </p>
 
               {/* interactions */}
-              <div className="w-fit mt-2">
+              <div className="w-fit mt-2 flex gap-4">
                 {listing.type[0] === "rent" ? (
                   <button className="bg-red-900 w-28 py-1 rounded-lg text-white font-semibold">
                     For Rent
