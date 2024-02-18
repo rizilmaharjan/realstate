@@ -6,11 +6,30 @@ import SwiperCore from "swiper";
 import "swiper/css/bundle";
 import { Navigation } from "swiper/modules";
 import ListingItem from "../components/ListingItem";
+type propertyType = "sale" | "rent"
+type Property = {
+  _id: string;
+  name: string;
+  description: string;
+  address: string;
+  regularPrice: number;
+  discountPrice: number;
+  bathrooms: number;
+  bedrooms: number;
+  furnished: boolean;
+  parking: boolean;
+  type: string[];
+  offer: boolean;
+  imageUrls: propertyType[];
+  userRef: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export default function Home() {
-  const [offerListings, setOfferListings] = useState([])
-  const [saleListings, setSaleListings] = useState([])
-  const [rentListings, setRentListings] = useState([])
+  const [offerListings, setOfferListings] = useState<Property[]>([])
+  const [saleListings, setSaleListings] = useState<Property[]>([])
+  const [rentListings, setRentListings] = useState<Property[]>([])
   SwiperCore.use([Navigation])
 
   // to fetch datas
