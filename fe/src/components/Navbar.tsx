@@ -15,12 +15,12 @@ export default function Navbar() {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set("searchTerm", searchTerm);
     const searchQuery = urlParams.toString();
-    console.log("searchQuery", searchQuery);
     navigate(`/search?${searchQuery}`);
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
+    console.log("urlParams", urlParams)
     const searchTermFromUrl = urlParams.get("searchTerm");
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
@@ -57,13 +57,13 @@ export default function Navbar() {
           </form>
           <ul className="flex items-center gap-4">
             <NavLink to="/">
-              {" "}
+              
               <li className="hidden sm:inline text-slate-700 hover:underline cursor-pointer">
                 Home
               </li>
             </NavLink>
             <NavLink to="/about">
-              {" "}
+              
               <li className="hidden sm:inline text-slate-700 hover:underline cursor-pointer">
                 About
               </li>
