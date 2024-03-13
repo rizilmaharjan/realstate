@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  backend:
+    build: ./be
+    container_name: backend_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./be:/app/backend
+      - /app/backend/node_modules
+    depends_on: #means dont build backend service unitl db is built
+      - db
+    environment:
+      MONGO_URI: mongodb+srv://rizil:helloworld@mern.uguozam.mongodb.net/realestate
+      SECRETKEY: fahdsjlfhlasdhflkasdjhglkdsahflkjhasdkljfhsdalkjhfjklasdhflkasdhklfhasdlkj
+
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_DATA_DIR: /data/db
+    volumes:
+      - ./db:/data/db
+
+  frontend:
+    build: ./fe
+    container_name: frontend_container
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./fe:/app/frontend
+      - /app/frontend/node_modules
+
+    depends_on:
+      - backend
+    environment:
+      VITE_BASE_URL: "http://localhost:8000/api"
+      VITE_FIREBASE_API_KEY: "AIzaSyB50NxPB2IRsKShZCuMxELnSVlq72XD_aw"
